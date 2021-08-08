@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/rabbit
+        http://www.springframework.org/schema/rabbit/spring-rabbit-2.0.xsd">
+
+
+    <context:component-scan base-package="com.whb"/>
+    <context:property-placeholder location="classpath:rabbitmq.properties" file-encoding="UTF-8" ignore-unresolvable="true"/>
+    <!-- rabbitmq配置 -->
+    <bean id="rabbitConnectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+        <constructor-arg value="localhost" />
+        <property name="username" value="guest" />
+        <property name="password" value="guest" />
+        <property name="channelCacheSize" value="8" />
+        <property name="port" value="5672"/>
+    </bean>
+    <!-- spring 的 rabbit-admin -->
+    <rabbit:admin connection-factory="rabbitConnectionFactory" />
+    <!-- 生产者创建队列 -->
+    <rabbit:queue id="queue_4" durable="false" />
+
+    <!-- 消费者队列 -->
+    <rabbit:queue id="queue_1" durable="false" />
+    <rabbit:queue id="queue_2" durable="false" />
+    <rabbit:queue id="queue_3" durable="false" />
+    <!-- fanout 交换器-->
+    <rabbit:fanout-exchange name="fanout-exchange"
+            xmlns="http://www.springframework.org/schema/rabbit"
+                            durable="false" >
+        <bindings>
+            <binding queue="queue_1"></binding>
+            <binding queue="queue_2"></binding>
+            <binding queue="queue_3"></binding>
+        </bindings>
+    </rabbit:fanout-exchange>
+
+    <!-- topic 交换器 start-->
+    <!-- 消费者队列 -->
+    <rabbit:queue name="all_log_queue" durable="false" />
+    <rabbit:queue name="all_email_queue" durable="false" />
+    <rabbit:queue name="error_email_queue" durable="false" />
+    <rabbit:queue name="all_error_queue" durable="false" />
+
+
+    <!-- 将需要数据的队列通过路由键与交换器绑定一起-->
+    <rabbit:topic-exchange name="topic-exchange"
+                           xmlns="http://www.springframework.org/schema/rabbit"
+                           durable="false" >
+        <bindings>
+            <binding queue="all_log_queue" pattern="*.log"></binding>
+            <binding queue="all_email_queue" pattern="*.email"></binding>
+            <binding queue="error_email_queue" pattern="error.email"></binding>
+            <binding queue="all_error_queue" pattern="error.*"></binding>
+        </bindings>
+    </rabbit:topic-exchange>
+
+    <!-- topic交换器 end -->
+
+    <!--消费者定义-->
+    <bean name="h1_Consumer" class="com.whb.service.impl.H1_Service"  />
+    <bean name="h2_Consumer" class="com.whb.service.impl.H2_Service"  />
+    <bean name="h3_Consumer" class="com.whb.service.impl.H3_Service"  />
+
+    <!-- 监听容器 -->
+    <rabbit:listener-container connection-factory="rabbitConnectionFactory" >
+        <rabbit:listener ref="h1_Consumer" queues="queue_1" method="onMessage" />
+        <rabbit:listener ref="h2_Consumer" queues="queue_2" method="onMessage" />
+        <rabbit:listener ref="h3_Consumer" queues="queue_3" method="onMessage" />
+        <rabbit:listener ref="allLogTopicService" queues="all_log_queue" method="onMessage" />
+        <rabbit:listener ref="allEmailTopicService" queues="all_email_queue" method="onMessage" />
+        <rabbit:listener ref="emailErrorTopicService" queues="error_email_queue" method="onMessage" />
+        <rabbit:listener ref="allErrorTopicService" queues="all_error_queue" method="onMessage" />
+
+    </rabbit:listener-container>
+    <bean id="rabbitTemplate" class="org.springframework.amqp.rabbit.core.RabbitTemplate">
+        <constructor-arg ref="rabbitConnectionFactory" />
+    </bean>
+</beans>
