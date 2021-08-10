@@ -7,12 +7,39 @@ package com.whb.model;
  * @create: 2021-07-12 17:04
  **/
 public class UserEntity {
+    private String phone;
+    private String email;
+    private String id;
     private String name;
     private Integer age;
     private String className;
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setName(String name) {
