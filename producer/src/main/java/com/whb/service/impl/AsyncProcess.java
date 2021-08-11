@@ -5,6 +5,7 @@ import com.whb.service.IUserService;
 import com.whb.service.busi.SaveUser;
 import com.whb.service.busi.SendEmail;
 import com.whb.service.busi.SendSms;
+import com.whb.tools.DoneTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -25,6 +26,7 @@ public class AsyncProcess implements IUserService {
     private RabbitTemplate rabbitTemplate;
     @Autowired
     private SaveUser saveUser;
+    @DoneTime(param = "userRegister")
     public boolean userRegister(UserEntity userEntity){
         logger.info("**************   ASYNC");
         try{

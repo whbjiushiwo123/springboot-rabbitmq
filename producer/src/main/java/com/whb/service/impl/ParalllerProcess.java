@@ -5,6 +5,7 @@ import com.whb.service.IUserService;
 import com.whb.service.busi.SaveUser;
 import com.whb.service.busi.SendEmail;
 import com.whb.service.busi.SendSms;
+import com.whb.tools.DoneTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,7 @@ public class ParalllerProcess implements IUserService {
             return null;
         }
     }
+    @DoneTime(param = "userRegister")
     public boolean userRegister(UserEntity userEntity){
         FutureTask<Boolean> sendMailFuture =
                 new FutureTask<>(new SendEmailThread(sendEmail, userEntity.getEmail()));
