@@ -5,6 +5,8 @@ import com.whb.service.IUserService;
 import com.whb.service.busi.SaveUser;
 import com.whb.service.busi.SendEmail;
 import com.whb.service.busi.SendSms;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -18,14 +20,16 @@ import org.springframework.stereotype.Service;
 @Service
 @Qualifier("async")
 public class AsyncProcess implements IUserService {
+    private static Logger logger = LoggerFactory.getLogger(AsyncProcess.class);
     @Autowired
     private RabbitTemplate rabbitTemplate;
     @Autowired
     private SaveUser saveUser;
     public boolean userRegister(UserEntity userEntity){
+        logger.info("**************   ASYNC");
         try{
             saveUser.saveUser(userEntity);
-            rabbitTemplate.send("user-reg-exchange","email",
+            rabbitTemplate.send("user-reg-exchange","mail",
                     new Message(userEntity.getEmail().getBytes(),new MessageProperties()));
             rabbitTemplate.send("user-reg-exchange","sms",
                     new Message(userEntity.getPhone().getBytes(),new MessageProperties()));
