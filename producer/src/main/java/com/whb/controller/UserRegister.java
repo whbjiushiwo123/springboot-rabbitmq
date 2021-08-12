@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserRegister {
     private static Logger logger = LoggerFactory.getLogger(UserRegister.class);
     @Autowired
-    @Qualifier("paralller")
+    @Qualifier("async")
     private IUserService userService;
     @ResponseBody
     @RequestMapping("/userRegister")

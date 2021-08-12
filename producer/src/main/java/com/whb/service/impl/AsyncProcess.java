@@ -3,8 +3,6 @@ package com.whb.service.impl;
 import com.whb.model.UserEntity;
 import com.whb.service.IUserService;
 import com.whb.service.busi.SaveUser;
-import com.whb.service.busi.SendEmail;
-import com.whb.service.busi.SendSms;
 import com.whb.tools.DoneTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +26,14 @@ public class AsyncProcess implements IUserService {
     private SaveUser saveUser;
     @DoneTime(param = "userRegister")
     public boolean userRegister(UserEntity userEntity){
-        logger.info("**************   ASYNC");
+        logger.info("**************   ASYNC start");
         try{
             saveUser.saveUser(userEntity);
             rabbitTemplate.send("user-reg-exchange","mail",
                     new Message(userEntity.getEmail().getBytes(),new MessageProperties()));
             rabbitTemplate.send("user-reg-exchange","sms",
                     new Message(userEntity.getPhone().getBytes(),new MessageProperties()));
+            logger.info("**************   ASYNC end");
             return true;
         }catch (Exception e){
             e.printStackTrace();
