@@ -23,7 +23,7 @@
         <constructor-arg value="${spring.rabbitmq.host}" />
         <property name="username" value="${spring.rabbitmq.username}" />
         <property name="password" value="${spring.rabbitmq.password}" />
-        <property name="channelCacheSize" value="8" />
+        <property name="channelCacheSize" value="${spring.rabbitmq.channelCacheSize}" />
         <property name="port" value="${spring.rabbitmq.port}"/>
     </bean>
     <!-- spring 的 rabbit-admin -->

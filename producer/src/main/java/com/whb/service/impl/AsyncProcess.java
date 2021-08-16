@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 @Qualifier("async")
 public class AsyncProcess implements IUserService {
     private static Logger logger = LoggerFactory.getLogger(AsyncProcess.class);
+    private volatile static Object lock1 = new Object();
+    private volatile static Object lock2 = new Object();
     @Autowired
     private RabbitTemplate rabbitTemplate;
     @Autowired
@@ -39,5 +41,45 @@ public class AsyncProcess implements IUserService {
             e.printStackTrace();
         }
         return false;
+    }
+    class T1 implements Runnable{
+
+        @Override
+        public void run() {
+            synchronized (lock1){
+                try {
+                    System.out.println("T1 开始加锁 1！"+lock1);
+                    Thread.sleep(2000L);
+                    synchronized (lock2){
+                        System.out.println("T1 加锁 2 成功！"+lock2);
+                    }
+                    lock1 = "OK";
+                    System.out.println("T1 结束！");
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    class T2 implements Runnable{
+
+        @Override
+        public void run() {
+            synchronized (lock2){
+                try {
+                    System.out.println("T2 开始加锁 1！"+lock2);
+                    Thread.sleep(2000L);
+                    synchronized (lock1){
+                        System.out.println("T2 加锁 2 成功！"+lock1);
+                    }
+                    lock2 = "OK";
+                    System.out.println("T2 结束！");
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
