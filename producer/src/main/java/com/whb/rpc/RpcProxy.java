@@ -46,11 +46,8 @@ public class RpcProxy {
                 output.writeObject(args);
 
                 input = new ObjectInputStream(socket.getInputStream());
-                String result = input.readUTF();
-                if(result.equals(RpcConst.EXCEPTION)){
-                    throw new RuntimeException("远程服务器异常！");
-                }
-                return true;
+                return input.readUTF();
+
             } finally {
                 socket.close();
                 output.close();

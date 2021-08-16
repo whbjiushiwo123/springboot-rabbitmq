@@ -28,18 +28,13 @@
     </bean>
     <!-- spring 的 rabbit-admin -->
     <rabbit:admin connection-factory="rabbitConnectionFactory" />
-    <!-- 邮件相关 -->
-    <rabbit:queue id="mail_queue" durable="false" />
-    <!-- 短信相关 -->
-    <rabbit:queue id="sms_queue" durable="false" />
-
+    <rabbit:queue id="depot_amount_queue" durable="false" />
     <!-- 将队列和交换器由键绑定 -->
-    <rabbit:direct-exchange name="user-reg-exchange"
+    <rabbit:direct-exchange name="depot-amount-exchange"
             xmlns="http://www.springframework.org/schema/rabbit"
-                            durable="false" >
+                            durable="true" >
         <bindings>
-            <binding queue="mail_queue" key="mail"></binding>
-            <binding queue="sms_queue" key="sms"></binding>
+            <binding queue="depot_amount_queue" key="depot.amount"></binding>
         </bindings>
     </rabbit:direct-exchange>
 

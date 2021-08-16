@@ -3,16 +3,20 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:rabbit="http://www.springframework.org/schema/rabbit"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
         https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/rabbit
         http://www.springframework.org/schema/rabbit/spring-rabbit-2.0.xsd">
 
-    <rabbit:annotation-driven />
-    <context:component-scan base-package="com.whb"/>
+
+    <aop:aspectj-autoproxy />
+    <context:component-scan base-package="com.whb" />
     <context:property-placeholder location="classpath:rabbitmq.properties" file-encoding="UTF-8" ignore-unresolvable="true"/>
     <!-- rabbitmq配置 -->
     <bean id="rabbitConnectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
@@ -28,17 +32,4 @@
     <bean id="rabbitTemplate" class="org.springframework.amqp.rabbit.core.RabbitTemplate">
         <constructor-arg ref="rabbitConnectionFactory" />
     </bean>
-
-    <rabbit:queue name="mail_queue" durable="false" />
-    <rabbit:queue name="sms_queue" durable="false" />
-    <!-- 将队列和交换器由键绑定 -->
-    <rabbit:direct-exchange name="user-reg-exchange"
-                            xmlns="http://www.springframework.org/schema/rabbit"
-                            durable="false" >
-        <bindings>
-            <binding queue="mail_queue" key="mail"></binding>
-            <binding queue="sms_queue" key="sms"></binding>
-        </bindings>
-    </rabbit:direct-exchange>
-
 </beans>
