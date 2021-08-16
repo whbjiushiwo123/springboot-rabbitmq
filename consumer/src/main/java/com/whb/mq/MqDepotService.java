@@ -11,7 +11,7 @@ public class MqDepotService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @RabbitListener(queues = "depot_amount_queue")
+    @RabbitListener(queues = "reduce_account")
     @RabbitHandler
     public void onMessage(String message){
         System.out.println("recevie:"+message);

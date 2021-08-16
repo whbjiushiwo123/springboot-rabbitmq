@@ -28,13 +28,13 @@
     </bean>
     <!-- spring 的 rabbit-admin -->
     <rabbit:admin connection-factory="rabbitConnectionFactory" />
-    <rabbit:queue id="reduce_amount" durable="false" />
+    <rabbit:queue id="reduce_account" durable="false" />
     <!-- 将队列和交换器由键绑定 -->
-    <rabbit:direct-exchange name="reduce-amount-exchange"
+    <rabbit:direct-exchange name="reduce-account-exchange"
             xmlns="http://www.springframework.org/schema/rabbit"
-                            durable="true" >
+                            durable="false" >
         <bindings>
-            <binding queue="reduce_amount" key="depot.amount"></binding>
+            <binding queue="reduce_account" key="depot.account"></binding>
         </bindings>
     </rabbit:direct-exchange>
 

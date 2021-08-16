@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 @Qualifier("mq")
 public class MQOrderService implements IOrderService {
-    private static final String DEPOT_KEY="depot.amount";
-    private static final String DEPOT_EXCHANGE = "depot-amount-exchange";
+    private static final String DEPOT_KEY="depot.account";
+    private static final String DEPOT_EXCHANGE = "reduce-account-exchange";
     @Autowired
     private RabbitTemplate rabbitTemplate;
     @Override
