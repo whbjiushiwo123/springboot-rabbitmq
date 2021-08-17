@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class OrderController {
     private Logger logger = LoggerFactory.getLogger(OrderController.class);
     @Autowired
-    @Qualifier("mq")
+    @Qualifier("mqAck")
     private IOrderService orderService;
 
     @ResponseBody

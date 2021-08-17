@@ -29,7 +29,7 @@
     <!-- spring 的 rabbit-admin -->
     <rabbit:admin connection-factory="rabbitConnectionFactory" />
 
-    <rabbit:queue name="reduce_account" durable="false" />
+    <rabbit:queue name="reduce_account" durable="true" />
     <bean id="rabbitTemplate" class="org.springframework.amqp.rabbit.core.RabbitTemplate">
         <constructor-arg ref="rabbitConnectionFactory" />
     </bean>

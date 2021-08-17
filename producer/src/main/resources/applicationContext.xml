@@ -28,11 +28,11 @@
     </bean>
     <!-- spring 的 rabbit-admin -->
     <rabbit:admin connection-factory="rabbitConnectionFactory" />
-    <rabbit:queue id="reduce_account" durable="false" />
+    <rabbit:queue id="reduce_account" durable="true" />
     <!-- 将队列和交换器由键绑定 -->
     <rabbit:direct-exchange name="reduce-account-exchange"
             xmlns="http://www.springframework.org/schema/rabbit"
-                            durable="false" >
+                            durable="true" >
         <bindings>
             <binding queue="reduce_account" key="depot.account"></binding>
         </bindings>
@@ -40,5 +40,7 @@
 
     <bean id="rabbitTemplate" class="org.springframework.amqp.rabbit.core.RabbitTemplate">
         <constructor-arg ref="rabbitConnectionFactory" />
+        <property name="confirmCallback" ref="confirmCallBack" />
+        <property name="returnCallback" ref="returnCallback" />
     </bean>
 </beans>
