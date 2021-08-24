@@ -25,12 +25,15 @@
         <property name="password" value="${spring.rabbitmq.password}" />
         <property name="channelCacheSize" value="8" />
         <property name="port" value="${spring.rabbitmq.port}"/>
+        <property name="publisherConfirmType" value="${spring.rabbitmq.publisherConfirmType}" />
+        <property name="virtualHost" value="${spring.rabbitmq.virtualHost}" />
     </bean>
     <!-- spring 的 rabbit-admin -->
     <rabbit:admin connection-factory="rabbitConnectionFactory" />
 
-    <rabbit:queue name="reduce_account" durable="false" />
-    <bean id="rabbitTemplate" class="org.springframework.amqp.rabbit.core.RabbitTemplate">
+    <rabbit:queue name="reduce_account" durable="true" />
+    <bean id="rabbitTemplate"
+          class="org.springframework.amqp.rabbit.core.RabbitTemplate">
         <constructor-arg ref="rabbitConnectionFactory" />
     </bean>
 </beans>
