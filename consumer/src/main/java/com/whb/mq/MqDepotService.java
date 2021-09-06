@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
-public class MqDepotService {
+public class MqDepotService extends ClassLoader{
     @Autowired
     private IDepositService depositService;
     @Autowired
@@ -24,5 +24,9 @@ public class MqDepotService {
         System.out.println("recevie:"+new String(message.getBody()));
         GoodTransferVo vo = JSON.parseObject(new String(message.getBody()), GoodTransferVo.class);
         depositService.Inventory(vo);
+    }
+    @Override
+    public Class<?> findClass(String name) throws ClassNotFoundException {
+        return  ProcessDepot.class;
     }
 }
