@@ -204,4 +204,19 @@ public class AppTest
             System.out.println(ClassLayout.parseInstance(o).toPrintable(o));
         }
     }
+    @Test
+    public void test08(){
+        o = new Object();
+        System.out.println(ClassLayout.parseInstance(o).toPrintable(o));
+    }
+    @Test
+    public void JOLDemo01(){
+        try { Thread.sleep(5000); } catch (InterruptedException e) { e.printStackTrace(); }
+        o = new Object();
+        synchronized (o){
+            Map m = new HashMap();
+            m.put("1",1);
+            System.out.println(ClassLayout.parseInstance(o).toPrintable());
+        }
+    }
 }
