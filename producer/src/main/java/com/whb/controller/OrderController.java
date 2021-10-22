@@ -2,6 +2,7 @@ package com.whb.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.whb.service.IOrderService;
+import com.whb.service.TestService;
 import com.whb.vo.GoodTransferVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +21,13 @@ public class OrderController {
     @Qualifier("mqAck")
     private IOrderService orderService;
 
+    @Autowired
+    private TestService testService;
+
     @ResponseBody
     @RequestMapping("/orderConfirm")
     public String order(@RequestBody GoodTransferVo vo){
-        logger.info("订单："+ JSONObject.toJSON(vo));
-        orderService.order(vo);
-        return "OK";
+        String name = testService.getName();
+        return "name";
     }
 }
