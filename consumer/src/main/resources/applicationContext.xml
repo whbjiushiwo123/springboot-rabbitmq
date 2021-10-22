@@ -5,6 +5,7 @@
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
@@ -12,7 +13,9 @@
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/rabbit
-        http://www.springframework.org/schema/rabbit/spring-rabbit-2.0.xsd">
+        http://www.springframework.org/schema/rabbit/spring-rabbit-2.0.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">
 
 
     <aop:aspectj-autoproxy />
@@ -36,4 +39,9 @@
           class="org.springframework.amqp.rabbit.core.RabbitTemplate">
         <constructor-arg ref="rabbitConnectionFactory" />
     </bean>
+
+    <dubbo:application name="provide" />
+    <dubbo:registry address="zookeeper://39.101.143.248:2181" />
+    <dubbo:protocol name="dubbo" port="29015" />
+    <dubbo:service interface="com.whb.service.TestService" ref="testService" />
 </beans>
