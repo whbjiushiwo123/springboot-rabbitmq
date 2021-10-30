@@ -21,6 +21,7 @@
     <aop:aspectj-autoproxy />
     <context:component-scan base-package="com.whb" />
     <context:property-placeholder location="classpath:rabbitmq.properties,classpath:netty.properties" file-encoding="UTF-8" ignore-unresolvable="true"/>
+    <import resource="classpath:mybaits.xml" />
     <!-- rabbitmq配置 -->
     <bean id="rabbitConnectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
         <constructor-arg value="${spring.rabbitmq.host}" />
