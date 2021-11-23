@@ -1,9 +1,10 @@
 package com.whb.netty;
 
+
 import org.springframework.stereotype.Component;
 
 @Component
-public class CloseFutureHandler implements Handler{
+public class BusinessFutureHandler implements Handler{
     private Handler nextHandler;
 
     public Handler getNextHandler() {
@@ -16,10 +17,10 @@ public class CloseFutureHandler implements Handler{
 
     @Override
     public String hander(String msg) {
-        System.out.println(msg + "正在关闭。");
-        if (nextHandler != null) {
+        System.out.println("接收到信息：" + msg);
+        if(nextHandler != null){
             nextHandler.hander(msg);
         }
-        return COMMONRET;
+        return msg;
     }
 }

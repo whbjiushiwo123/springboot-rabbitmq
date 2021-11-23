@@ -1,6 +1,7 @@
 package com.whb.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.whb.service.INettyClientService;
 import com.whb.service.IOrderService;
 import com.whb.service.TestService;
 import com.whb.vo.GoodTransferVo;
@@ -24,10 +25,19 @@ public class OrderController {
     @Autowired
     private TestService testService;
 
+    @Autowired
+    private INettyClientService nettyClientService;
+
     @ResponseBody
     @RequestMapping("/orderConfirm")
     public String order(@RequestBody GoodTransferVo vo){
         String name = testService.getName();
         return name;
+    }
+
+    @ResponseBody
+    @RequestMapping("/nettyClient")
+    public String nettyClient(@RequestBody GoodTransferVo vo) throws InterruptedException {
+        return nettyClientService.rpcServer(vo);
     }
 }
