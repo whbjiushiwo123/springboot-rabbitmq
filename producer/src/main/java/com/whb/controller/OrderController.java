@@ -31,8 +31,7 @@ public class OrderController {
     @ResponseBody
     @RequestMapping("/orderConfirm")
     public String order(@RequestBody GoodTransferVo vo){
-        String name = testService.getName();
-        return name;
+        return "";
     }
 
     @ResponseBody
